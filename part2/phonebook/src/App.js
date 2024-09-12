@@ -95,8 +95,7 @@ const App = () => {
             updateNotification(`Successfully updated phone number for entry '${newPerson.name}' to '${newPerson.number}'!`, TYPE.SUCCESS)
           } )
           .catch( error => {
-            updateNotification(`Error updating the number for the entry '${newPerson.name}' to the phonebook.
-                                The entry was probably deleted from the server. Please refresh the page and try again!`, TYPE.ERROR)
+            updateNotification(`Error updating the number for the entry '${newPerson.name}' to the phonebook.\n${error.response.data.error}.\nPlease refresh the page and try again!`, TYPE.ERROR)
           })
         }
       }
@@ -112,7 +111,7 @@ const App = () => {
           updateNotification(`Successfully created entry '${newPerson.name} ${newPerson.number}'!`, TYPE.SUCCESS)
         } )
         .catch( error => {
-          updateNotification(`Error submitting the new entry: ${newPerson.name} ${newPerson.number} to the phonebook. Please try again!`, TYPE.ERROR)
+          updateNotification(`Error submitting the new entry: ${newPerson.name} ${newPerson.number} to the phonebook.\n${error.response.data.error}.\nPlease try again!`, TYPE.ERROR)
         })
     }
   }
@@ -132,7 +131,7 @@ const App = () => {
           updateNotification(`Successfully deleted entry ${personToDel.name} ${personToDel.number}`, TYPE.SUCCESS)
         }
       ).catch( error => {
-          updateNotification(`Unable to delete entry ${personToDel.name} ${personToDel.number} from the server. Please try again!`, type.ERROR)
+          updateNotification(`Unable to delete entry ${personToDel.name} ${personToDel.number} from the server. Please try again!`, TYPE.ERROR)
       })
     }
   }
