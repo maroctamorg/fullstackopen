@@ -5,17 +5,17 @@ const AnecdoteFilter = () => {
     const dispatch = useDispatch()
 
     const handleChange = (event) => {
-      dispatch(setFilter(event.target.value))
+        dispatch(setFilter(event.target.value))
     }
 
     const style = {
-      marginBottom: 10
+        marginBottom: 10
     }
 
     return (
-      <div style={style}>
+        <div style={style}>
         filter <input onChange={handleChange} />
-      </div>
+        </div>
     )
 }
 
