@@ -1,18 +1,18 @@
 const Notification = () => {
-  const style = {
-    border: 'solid',
-    padding: 10,
-    borderWidth: 1,
-    marginBottom: 5
-  }
+    const style = {
+        border: 'solid',
+        padding: 10,
+        borderWidth: 1,
+        marginBottom: 5
+    }
   
-  if (true) return null
+    if (true) return null
 
-  return (
-    <div style={style}>
+    return (
+        <div style={style}>
       
-    </div>
-  )
+        </div>
+    )
 }
 
 export default Notification
