@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Route, Link, useMatch, Routes, useNavigate } from 'react-router-dom'
-import { useSetNotification } from './context/NotificationContext'
+import { Route, Link, useMatch, Routes } from 'react-router-dom'
 import Notification from './components/Notification'
+import AnecdoteForm from './components/AnecdoteForm'
+import Anecdotes from './components/Anecdotes'
 
 const Menu = () => {
   const padding = {
@@ -22,20 +23,6 @@ const Anecdote = ({ anecdote }) => (
         <p>has {anecdote.votes} votes</p>
         <p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p>
     </div>
-)
-
-const AnecdoteList = ({ anecdotes }) => (
-  <div>
-    <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote =>
-        <li key={anecdote.id}>{
-            <Link to={`/anecdotes/${anecdote.id}`}>
-                {anecdote.content}
-            </Link>
-        }</li>)}
-    </ul>
-  </div>
 )
 
 const About = () => (
@@ -59,49 +46,6 @@ const Footer = () => (
     See <a href='https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js'>https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js</a> for the source code.
   </div>
 )
-
-const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
-
-  const navigate = useNavigate()
-  const setNotification = useSetNotification()
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    props.addNew({
-      content,
-      author,
-      info,
-      votes: 0
-    })
-    navigate('/')
-    setNotification(`a new anecdote ${content} created!`)
-  }
-
-  return (
-    <div>
-      <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
-        </div>
-        <div>
-          author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
-        </div>
-        <div>
-          url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
-        </div>
-        <button>create</button>
-      </form>
-    </div>
-  )
-
-}
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
@@ -152,10 +96,10 @@ const App = () => {
       <Notification />
       <Menu />
       <Routes>
-        <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
+        <Route path="/" element={<Anecdotes anecdotes={anecdotes} />} />
         <Route path="/anecdotes/:id" element={<Anecdote anecdote={anecdote} />} />
         <Route path="/about" element={<About />} />
-        <Route path="/create" element={<CreateNew addNew={addNew} />} />
+        <Route path="/create" element={<AnecdoteForm addNew={addNew} />} />
       </Routes>
       <Footer />
     </div>
