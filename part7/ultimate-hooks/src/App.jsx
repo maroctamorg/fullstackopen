@@ -37,7 +37,7 @@ const useResource = (baseUrl) => {
     create
   }
 
-  getAll()
+  useEffect(getAll, [])
 
   return [
     resources, service
