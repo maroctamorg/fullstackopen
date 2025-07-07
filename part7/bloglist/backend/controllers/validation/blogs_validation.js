@@ -1,6 +1,10 @@
 const Blog = require('../../models/blog')
 const User = require('../../models/user')
-const { ValidationError, AuthenticationError, AuthorizationError } = require('../../utils/errors')
+const {
+    ValidationError,
+    AuthenticationError,
+    AuthorizationError,
+} = require('../../utils/errors')
 
 const validate_token = (request) => {
     if (request.user === undefined) {
@@ -26,8 +30,10 @@ const validate_authorization = async (request) => {
         throw ValidationError('blog not found')
     }
 
-    if(blog.user.toString() !== request.user.toString()) {
-        throw AuthorizationError(`user ${request.user} is not authorized to delete blog ${request.params.id}`)
+    if (blog.user.toString() !== request.user.toString()) {
+        throw AuthorizationError(
+            `user ${request.user} is not authorized to delete blog ${request.params.id}`
+        )
     }
 }
 

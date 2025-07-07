@@ -17,10 +17,14 @@ beforeEach(async () => {
     const savedUser = await user.save()
 
     await Blog.deleteMany({})
-    await Promise.all(initialblogs.map(blog => new Blog({
-        ...blog,
-        user: savedUser.id
-    }).save()))
+    await Promise.all(
+        initialblogs.map((blog) =>
+            new Blog({
+                ...blog,
+                user: savedUser.id,
+            }).save()
+        )
+    )
 })
 
 describe('when fetching resources', () => {
@@ -41,7 +45,7 @@ describe('when adding resources', () => {
             title: 'Bitcoin',
             author: 'Satoshi Nakamoto',
             url: 'https://bitcoin.org/en/',
-            likes: 1000000
+            likes: 1000000,
         }
 
         const loginResponse = await api
@@ -62,7 +66,11 @@ describe('when adding resources', () => {
     })
 
     test('likes property defaults to 0', async () => {
-        const newBlog = { title: 'Bitcoin', author: 'Satoshi Nakamoto', url: 'https://bitcoin.org/en/' }
+        const newBlog = {
+            title: 'Bitcoin',
+            author: 'Satoshi Nakamoto',
+            url: 'https://bitcoin.org/en/',
+        }
 
         const loginResponse = await api
             .post('/api/login')
@@ -94,7 +102,10 @@ describe('when adding resources', () => {
             .expect(400)
 
         console.log(response.body.error)
-        assert.strictEqual(response.body.error, 'Blog validation failed: url: URL required, title: Title required')
+        assert.strictEqual(
+            response.body.error,
+            'Blog validation failed: url: URL required, title: Title required'
+        )
     })
 
     test('a blog cannot be added without a valid token', async () => {
@@ -102,10 +113,7 @@ describe('when adding resources', () => {
             title: 'Bitcoin',
         }
 
-        await api
-            .post('/api/blogs')
-            .send(newBlog)
-            .expect(401)
+        await api.post('/api/blogs').send(newBlog).expect(401)
     })
 })
 
@@ -131,7 +139,11 @@ describe('when updating resources', () => {
     test('a blog can be updated', async () => {
         const blogs = await Blog.find({})
         const blogToUpdate = blogs[0].toJSON()
-        const updatedBlog = { ...blogToUpdate, url: 'https://new.url.com', likes: blogToUpdate.likes + 1 }
+        const updatedBlog = {
+            ...blogToUpdate,
+            url: 'https://new.url.com',
+            likes: blogToUpdate.likes + 1,
+        }
 
         const loginResponse = await api
             .post('/api/login')

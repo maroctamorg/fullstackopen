@@ -5,14 +5,17 @@ const { saltRounds } = require('../config/crypto')
 const { validate } = require('./validation/users_validation')
 
 usersRouter.get('/', async (request, response) =>
-    response.json(await User.find({}).populate('blogs', { url: 1, title: 1, author: 1 })))
+    response.json(
+        await User.find({}).populate('blogs', { url: 1, title: 1, author: 1 })
+    )
+)
 
 usersRouter.post('/', async (request, response) => {
     await validate(request.body)
-    const user = new User( {
+    const user = new User({
         ...request.body,
-        passwordHash: await bcrypt.hash(request.body.password, saltRounds)
-    } )
+        passwordHash: await bcrypt.hash(request.body.password, saltRounds),
+    })
     response.status(201).json(await user.save())
 })
 

@@ -6,16 +6,20 @@ const Blog = ({ blog, like, remove }) => {
         paddingLeft: 2,
         border: 'solid',
         borderWidth: 1,
-        marginBottom: 5
+        marginBottom: 5,
     }
 
     return (
         <div style={blogStyle}>
-            <h3 className='blog-header'>{blog.title} {blog.author} </h3>
+            <h3 className="blog-header">
+                {blog.title} {blog.author}{' '}
+            </h3>
             <Toggable buttonLabel="view">
-                <p className='blog-details'>
+                <p className="blog-details">
                     {blog.url} <br />
-                    likes <span data-testid='number-of-likes'>{blog.likes}</span> <button onClick={() => like(blog.id)}>like</button> <br />
+                    likes{' '}
+                    <span data-testid="number-of-likes">{blog.likes}</span>{' '}
+                    <button onClick={() => like(blog)}>like</button> <br />
                     {blog.user.username} <br />
                     <button onClick={() => remove(blog)}>remove</button>
                 </p>

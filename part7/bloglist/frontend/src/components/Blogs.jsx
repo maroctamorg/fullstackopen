@@ -8,9 +8,7 @@ const Blogs = ({ notify }) => {
     const [blogs, setBlogs] = useState([])
 
     useEffect(() => {
-        blogService.getAll().then(blogs =>
-            setBlogs( blogs )
-        )
+        blogService.getAll().then((blogs) => setBlogs(blogs))
     }, [])
 
     useEffect(() => {
@@ -20,12 +18,15 @@ const Blogs = ({ notify }) => {
 
     const blogFormRef = useRef()
 
-    const likeBlog = async (blogId) => {
+    const likeBlog = async (blog) => {
         try {
-            setBlogs(blogs.map(b => b.id === blogId ? {...b, likes: b.likes+1} : b))
+            setBlogs(
+                blogs.map((b) =>
+                    b.id === blog.Id ? { ...b, likes: b.likes + 1 } : b
+                )
+            )
             await blogService.update(blog.id, blog)
-        }
-        catch (exception) {
+        } catch (exception) {
             notify(`unable to like blog: ${exception.message}`, 'error')
         }
     }
@@ -34,9 +35,8 @@ const Blogs = ({ notify }) => {
         try {
             window.confirm(`remove blog ${blog.title} by ${blog.author}`)
             await blogService.remove(blog.id)
-            setBlogs(blogs.filter(b => b.id !== blog.id))
-        }
-        catch (exception) {
+            setBlogs(blogs.filter((b) => b.id !== blog.id))
+        } catch (exception) {
             notify(`unable to remove blog: ${exception.message}`, 'error')
         }
     }
@@ -44,13 +44,17 @@ const Blogs = ({ notify }) => {
     const addNewBlog = async ({ title, author, url }) => {
         try {
             const newBlog = await blogService.create({
-                title, author, url
+                title,
+                author,
+                url,
             })
             setBlogs(blogs.concat(newBlog))
             blogFormRef.current.toggleVisibility()
-            notify(`a new blog ${newBlog.title} by ${newBlog.author} added`, 'success')
-        }
-        catch (exception) {
+            notify(
+                `a new blog ${newBlog.title} by ${newBlog.author} added`,
+                'success'
+            )
+        } catch (exception) {
             notify(`unable to add blog: ${exception.message}`, 'error')
         }
     }
@@ -58,7 +62,14 @@ const Blogs = ({ notify }) => {
     return (
         <div>
             <h2>blogs</h2>
-            { blogs.map(blog => <Blog key={blog.id} blog={blog} like={likeBlog} remove={removeBlog} />) }
+            {blogs.map((blog) => (
+                <Blog
+                    key={blog.id}
+                    blog={blog}
+                    like={likeBlog}
+                    remove={removeBlog}
+                />
+            ))}
             <Toggable buttonLabel="create new blog" ref={blogFormRef}>
                 <BlogForm notify={notify} addNewBlog={addNewBlog} />
             </Toggable>

@@ -9,7 +9,7 @@ test('renders title and author, but not URL or likes by default', () => {
         author: 'Test Author',
         url: 'http://testurl.com',
         likes: 5,
-        user: { username: 'testuser' }
+        user: { username: 'testuser' },
     }
 
     const { container } = render(<Blog blog={blog} />)
@@ -30,7 +30,7 @@ test('shows URL and number of likes when toggled', async () => {
         author: 'Test Author',
         url: 'http://testurl.com',
         likes: 5,
-        user: { username: 'testuser' }
+        user: { username: 'testuser' },
     }
 
     const { container } = render(<Blog blog={blog} />)
@@ -49,7 +49,7 @@ test('event handler is called twice when like button is clicked twice', async ()
         author: 'Test Author',
         url: 'http://testurl.com',
         likes: 5,
-        user: { username: 'testuser' }
+        user: { username: 'testuser' },
     }
 
     const mockLike = vi.fn()
@@ -83,6 +83,6 @@ test('form calls addNewBlog with the right details when a new blog is created', 
     expect(addNewBlog).toHaveBeenCalledWith({
         title: 'Test Blog Title',
         author: 'Test Author',
-        url: 'http://testurl.com'
+        url: 'http://testurl.com',
     })
 })

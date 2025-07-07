@@ -14,7 +14,8 @@ const mongoose = require('mongoose')
 const tokenParser = require('./middleware/tokenParser')
 const userParser = require('./middleware/userParser')
 
-mongoose.connect(config.MONGODB_CONNECTION_STRING)
+mongoose
+    .connect(config.MONGODB_CONNECTION_STRING)
     .then(() => {
         logger.info('connected to MongoDB')
     })

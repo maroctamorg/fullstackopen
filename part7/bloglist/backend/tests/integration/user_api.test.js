@@ -9,7 +9,6 @@ const app = require('../../app')
 
 const api = supertest(app)
 describe('when there is initially one user in db', () => {
-
     beforeEach(async () => {
         await User.deleteMany({})
 
@@ -37,7 +36,7 @@ describe('when there is initially one user in db', () => {
         const usersAtEnd = await helper.usersInDb()
         assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
 
-        const usernames = usersAtEnd.map(u => u.username)
+        const usernames = usersAtEnd.map((u) => u.username)
         assert(usernames.includes(newUser.username))
     })
 
@@ -78,7 +77,11 @@ describe('when there is initially one user in db', () => {
             .expect('Content-Type', /application\/json/)
 
         const usersAtEnd = await helper.usersInDb()
-        assert(result.body.error.includes('username must be provided and at least 3 characters lon'))
+        assert(
+            result.body.error.includes(
+                'username must be provided and at least 3 characters lon'
+            )
+        )
 
         assert.strictEqual(usersAtEnd.length, usersAtStart.length)
     })
@@ -99,7 +102,11 @@ describe('when there is initially one user in db', () => {
             .expect('Content-Type', /application\/json/)
 
         const usersAtEnd = await helper.usersInDb()
-        assert(result.body.error.includes('password must be provided and at least 3 characters lon'))
+        assert(
+            result.body.error.includes(
+                'password must be provided and at least 3 characters lon'
+            )
+        )
 
         assert.strictEqual(usersAtEnd.length, usersAtStart.length)
     })

@@ -10,10 +10,14 @@ const Login = ({ setUser, notify }) => {
         event.preventDefault()
         try {
             const user = await loginService.login({
-                username, password,
+                username,
+                password,
             })
 
-            window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+            window.localStorage.setItem(
+                'loggedBlogappUser',
+                JSON.stringify(user)
+            )
             blogService.setToken(user.token)
             setUser(user)
             setUsername('')
@@ -28,7 +32,7 @@ const Login = ({ setUser, notify }) => {
             <h2>Log in to application</h2>
             <form onSubmit={handleLogin}>
                 <div>
-                username
+                    username
                     <input
                         type="text"
                         value={username}
@@ -38,7 +42,7 @@ const Login = ({ setUser, notify }) => {
                     />
                 </div>
                 <div>
-                password
+                    password
                     <input
                         type="password"
                         value={password}
@@ -49,7 +53,8 @@ const Login = ({ setUser, notify }) => {
                 </div>
                 <button type="submit">login</button>
             </form>
-        </div>)
+        </div>
+    )
 }
 
 export default Login

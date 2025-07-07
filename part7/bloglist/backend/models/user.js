@@ -5,11 +5,11 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: [true, 'Username required'],
-        unique: true
+        unique: true,
     },
     passwordHash: {
         type: String,
-        required: [true, 'Password required']
+        required: [true, 'Password required'],
     },
     name: {
         type: String,
@@ -17,13 +17,13 @@ const userSchema = new mongoose.Schema({
     blogs: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Blog'
-        }
-    ]
+            ref: 'Blog',
+        },
+    ],
 })
 
 userSchema.set('toJSON', {
-    transform: transform
+    transform: transform,
 })
 
 module.exports = mongoose.model('User', userSchema)
