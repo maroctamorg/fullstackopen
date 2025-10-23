@@ -1,10 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import Blog from './Blog'
 import Toggable from './Toggable'
 import BlogForm from './BlogForm'
 import blogService from '../services/blogs'
+import {
+    NOTIFICATION_TYPE,
+    setNotificationWithTimeout,
+} from '../reducers/notificationReducer'
 
-const Blogs = ({ notify }) => {
+const Blogs = () => {
+    const dispatch = useDispatch()
+
     const [blogs, setBlogs] = useState([])
 
     useEffect(() => {
@@ -22,22 +29,36 @@ const Blogs = ({ notify }) => {
         try {
             setBlogs(
                 blogs.map((b) =>
-                    b.id === blog.Id ? { ...b, likes: b.likes + 1 } : b
+                    b.id === blog.id ? { ...b, likes: b.likes + 1 } : b
                 )
             )
             await blogService.update(blog.id, blog)
         } catch (exception) {
-            notify(`unable to like blog: ${exception.message}`, 'error')
+            dispatch(
+                setNotificationWithTimeout(
+                    `unable to like blog: ${exception.message}`,
+                    NOTIFICATION_TYPE.ERROR
+                )
+            )
         }
     }
 
     const removeBlog = async (blog) => {
         try {
-            window.confirm(`remove blog ${blog.title} by ${blog.author}`)
+            if (
+                !window.confirm(`remove blog ${blog.title} by ${blog.author}`)
+            ) {
+                return
+            }
             await blogService.remove(blog.id)
             setBlogs(blogs.filter((b) => b.id !== blog.id))
         } catch (exception) {
-            notify(`unable to remove blog: ${exception.message}`, 'error')
+            dispatch(
+                setNotificationWithTimeout(
+                    `unable to remove blog: ${exception.message}`,
+                    NOTIFICATION_TYPE.ERROR
+                )
+            )
         }
     }
 
@@ -50,12 +71,19 @@ const Blogs = ({ notify }) => {
             })
             setBlogs(blogs.concat(newBlog))
             blogFormRef.current.toggleVisibility()
-            notify(
-                `a new blog ${newBlog.title} by ${newBlog.author} added`,
-                'success'
+            dispatch(
+                setNotificationWithTimeout(
+                    `a new blog ${newBlog.title} by ${newBlog.author} added`,
+                    NOTIFICATION_TYPE.SUCCESS
+                )
             )
         } catch (exception) {
-            notify(`unable to add blog: ${exception.message}`, 'error')
+            dispatch(
+                setNotificationWithTimeout(
+                    `unable to add blog: ${exception.message}`,
+                    NOTIFICATION_TYPE.ERROR
+                )
+            )
         }
     }
 
@@ -71,7 +99,7 @@ const Blogs = ({ notify }) => {
                 />
             ))}
             <Toggable buttonLabel="create new blog" ref={blogFormRef}>
-                <BlogForm notify={notify} addNewBlog={addNewBlog} />
+                <BlogForm addNewBlog={addNewBlog} />
             </Toggable>
         </div>
     )

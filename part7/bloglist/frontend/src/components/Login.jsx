@@ -1,8 +1,15 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import {
+    NOTIFICATION_TYPE,
+    setNotificationWithTimeout,
+} from '../reducers/notificationReducer'
 
-const Login = ({ setUser, notify }) => {
+const Login = ({ setUser }) => {
+    const dispatch = useDispatch()
+
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -23,7 +30,12 @@ const Login = ({ setUser, notify }) => {
             setUsername('')
             setPassword('')
         } catch (exception) {
-            notify('wrong username or password', 'error')
+            dispatch(
+                setNotificationWithTimeout(
+                    'wrong username or password',
+                    NOTIFICATION_TYPE.ERROR
+                )
+            )
         }
     }
 

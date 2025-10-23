@@ -7,22 +7,6 @@ import blogService from './services/blogs'
 const App = () => {
     const [user, setUser] = useState(null)
 
-    const TYPE = {
-        ERROR: 'error',
-        SUCCESS: 'success',
-    }
-    const [notification, setNotification] = useState({
-        message: null,
-        type: TYPE.ERROR,
-    })
-
-    const updateNotification = (message, type) => {
-        setNotification({ message: message, type: type })
-        setTimeout(() => {
-            setNotification({ message: null, type: null })
-        }, 5000)
-    }
-
     const logout = () => {
         window.localStorage.removeItem('loggedBlogappUser')
         setUser(null)
@@ -39,17 +23,14 @@ const App = () => {
 
     return (
         <div>
-            <Notification
-                message={notification.message}
-                type={notification.type}
-            />
+            <Notification />
             {user === null ? (
-                <Login setUser={setUser} notify={updateNotification} />
+                <Login setUser={setUser} />
             ) : (
                 <div>
                     <p>{user.username} logged-in</p>
                     <button onClick={logout}>logout</button>
-                    <Blogs notify={updateNotification} />
+                    <Blogs />
                 </div>
             )}
         </div>
