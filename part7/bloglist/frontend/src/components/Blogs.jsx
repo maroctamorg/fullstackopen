@@ -1,90 +1,37 @@
-import { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Blog from './Blog'
 import Toggable from './Toggable'
 import BlogForm from './BlogForm'
-import blogService from '../services/blogs'
 import {
-    NOTIFICATION_TYPE,
-    setNotificationWithTimeout,
-} from '../reducers/notificationReducer'
+    initializeBlogs,
+    createBlog,
+    likeBlog,
+    deleteBlog,
+} from '../reducers/blogReducer'
 
 const Blogs = () => {
     const dispatch = useDispatch()
-
-    const [blogs, setBlogs] = useState([])
-
-    useEffect(() => {
-        blogService.getAll().then((blogs) => setBlogs(blogs))
-    }, [])
+    const blogs = useSelector((state) => state.blogs)
 
     useEffect(() => {
-        const newBlogs = blogs
-        setBlogs(newBlogs.sort((a, b) => b.likes - a.likes - 1))
-    }, [blogs])
+        dispatch(initializeBlogs())
+    }, [dispatch])
 
     const blogFormRef = useRef()
 
-    const likeBlog = async (blog) => {
-        try {
-            setBlogs(
-                blogs.map((b) =>
-                    b.id === blog.id ? { ...b, likes: b.likes + 1 } : b
-                )
-            )
-            await blogService.update(blog.id, blog)
-        } catch (exception) {
-            dispatch(
-                setNotificationWithTimeout(
-                    `unable to like blog: ${exception.message}`,
-                    NOTIFICATION_TYPE.ERROR
-                )
-            )
-        }
+    const handleLike = (blog) => {
+        dispatch(likeBlog(blog))
     }
 
-    const removeBlog = async (blog) => {
-        try {
-            if (
-                !window.confirm(`remove blog ${blog.title} by ${blog.author}`)
-            ) {
-                return
-            }
-            await blogService.remove(blog.id)
-            setBlogs(blogs.filter((b) => b.id !== blog.id))
-        } catch (exception) {
-            dispatch(
-                setNotificationWithTimeout(
-                    `unable to remove blog: ${exception.message}`,
-                    NOTIFICATION_TYPE.ERROR
-                )
-            )
-        }
+    const handleRemove = (blog) => {
+        dispatch(deleteBlog(blog))
     }
 
-    const addNewBlog = async ({ title, author, url }) => {
-        try {
-            const newBlog = await blogService.create({
-                title,
-                author,
-                url,
-            })
-            setBlogs(blogs.concat(newBlog))
-            blogFormRef.current.toggleVisibility()
-            dispatch(
-                setNotificationWithTimeout(
-                    `a new blog ${newBlog.title} by ${newBlog.author} added`,
-                    NOTIFICATION_TYPE.SUCCESS
-                )
-            )
-        } catch (exception) {
-            dispatch(
-                setNotificationWithTimeout(
-                    `unable to add blog: ${exception.message}`,
-                    NOTIFICATION_TYPE.ERROR
-                )
-            )
-        }
+    const handleCreate = (blogData) => {
+        dispatch(
+            createBlog(blogData, () => blogFormRef.current.toggleVisibility())
+        )
     }
 
     return (
@@ -94,12 +41,12 @@ const Blogs = () => {
                 <Blog
                     key={blog.id}
                     blog={blog}
-                    like={likeBlog}
-                    remove={removeBlog}
+                    like={handleLike}
+                    remove={handleRemove}
                 />
             ))}
             <Toggable buttonLabel="create new blog" ref={blogFormRef}>
-                <BlogForm addNewBlog={addNewBlog} />
+                <BlogForm addNewBlog={handleCreate} />
             </Toggable>
         </div>
     )
