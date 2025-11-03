@@ -20,7 +20,7 @@ const Users = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {users?.map((user) => (
+                    {users.map((user) => (
                         <tr key={user.id}>
                             <td>{user.name}</td>
                             <td>{user.blogs.length}</td>
