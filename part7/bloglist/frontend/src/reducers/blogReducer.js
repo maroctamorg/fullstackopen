@@ -42,14 +42,11 @@ export const initializeBlogs = () => {
     }
 }
 
-export const createBlog = (blogData, toggleVisibility) => {
+export const createBlog = (blogData) => {
     return async (dispatch) => {
         try {
             const newBlog = await blogService.create(blogData)
             dispatch(appendBlog(newBlog))
-            if (toggleVisibility && typeof toggleVisibility === 'function') {
-                toggleVisibility()
-            }
             dispatch(
                 setNotificationWithTimeout(
                     `a new blog ${newBlog.title} by ${newBlog.author} added`,
@@ -87,11 +84,6 @@ export const likeBlog = (blog) => {
 export const deleteBlog = (blog) => {
     return async (dispatch) => {
         try {
-            if (
-                !window.confirm(`remove blog ${blog.title} by ${blog.author}`)
-            ) {
-                return
-            }
             await blogService.remove(blog.id)
             dispatch(removeBlog(blog.id))
         } catch (e) {

@@ -1,6 +1,8 @@
-import Toggable from './Toggable'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams, useNavigate } from 'react-router-dom'
+import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, like, remove }) => {
+const Blog = () => {
     const blogStyle = {
         paddingTop: 10,
         paddingLeft: 2,
@@ -9,22 +11,45 @@ const Blog = ({ blog, like, remove }) => {
         marginBottom: 5,
     }
 
+    const { id } = useParams()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const blogs = useSelector((state) => state.blogs)
+    const blog = blogs.find((b) => b.id === id)
+
+    if (!blog) {
+        return null
+    }
+    const handleLike = () => {
+        dispatch(likeBlog(blog))
+    }
+
+    const handleRemove = async () => {
+        if (!window.confirm(`remove blog ${blog.title} by ${blog.author}`)) {
+            return
+        }
+
+        dispatch(deleteBlog(blog))
+        navigate('/')
+    }
+
     return (
         <div style={blogStyle}>
             <h3 className="blog-header">
                 {blog.title} {blog.author}{' '}
             </h3>
-            <Toggable buttonLabel="view">
+            <div>
                 <p className="blog-details">
                     {blog.url} <br />
                     likes{' '}
                     <span data-testid="number-of-likes">{blog.likes}</span>{' '}
-                    <button onClick={() => like(blog)}>like</button> <br />
+                    <button onClick={handleLike}>like</button> <br />
                     {blog.user.username} <br />
-                    <button onClick={() => remove(blog)}>remove</button>
+                    <button onClick={handleRemove}>remove</button>
                 </p>
-            </Toggable>
+            </div>
         </div>
     )
 }
+
 export default Blog

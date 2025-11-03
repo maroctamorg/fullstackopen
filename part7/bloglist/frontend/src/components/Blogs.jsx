@@ -1,14 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Blog from './Blog'
+import { Link } from 'react-router-dom'
 import Toggable from './Toggable'
 import BlogForm from './BlogForm'
-import {
-    initializeBlogs,
-    createBlog,
-    likeBlog,
-    deleteBlog,
-} from '../reducers/blogReducer'
+import { initializeBlogs, createBlog } from '../reducers/blogReducer'
 
 const Blogs = () => {
     const dispatch = useDispatch()
@@ -20,31 +15,22 @@ const Blogs = () => {
 
     const blogFormRef = useRef()
 
-    const handleLike = (blog) => {
-        dispatch(likeBlog(blog))
-    }
-
-    const handleRemove = (blog) => {
-        dispatch(deleteBlog(blog))
-    }
-
     const handleCreate = (blogData) => {
-        dispatch(
-            createBlog(blogData, () => blogFormRef.current.toggleVisibility())
-        )
+        dispatch(createBlog(blogData))
     }
 
     return (
         <div>
             <h2>blogs</h2>
-            {blogs.map((blog) => (
-                <Blog
-                    key={blog.id}
-                    blog={blog}
-                    like={handleLike}
-                    remove={handleRemove}
-                />
-            ))}
+            <ul>
+                {blogs.map((blog) => (
+                    <li key={blog.id}>
+                        <Link to={`/blogs/${blog.id}`}>
+                            {blog.title} {blog.author}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
             <Toggable buttonLabel="create new blog" ref={blogFormRef}>
                 <BlogForm addNewBlog={handleCreate} />
             </Toggable>
