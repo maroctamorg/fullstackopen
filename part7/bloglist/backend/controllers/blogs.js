@@ -27,6 +27,20 @@ blogsRouter.post('/', async (request, response) => {
     response.status(201).json(blog)
 })
 
+blogsRouter.post('/:id/comments', async (request, response) => {
+    await validate_user(request)
+
+    const blog = await Blog.findById(request.params.id)
+    if (!blog) {
+        return response.status(404).json({ error: 'Blog not found' })
+    }
+
+    blog.comments = blog.comments.concat(request.body.comment)
+    await blog.save()
+
+    response.status(201).json(blog)
+})
+
 blogsRouter.put('/:id', async (req, res) => {
     await validate_authorization(req)
 

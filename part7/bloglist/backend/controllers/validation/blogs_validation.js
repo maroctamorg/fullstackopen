@@ -22,7 +22,6 @@ const validate_user = async (request) => {
 }
 
 const validate_authorization = async (request) => {
-    validate_token(request)
     validate_user(request)
 
     const blog = await Blog.findById(request.params.id)

@@ -1,10 +1,7 @@
-POST http://localhost:3003/api/blogs
+POST http://localhost:3003/api/blogs/69088b68a69feb4cb4abe763/comments
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1jbG92aW4iLCJpZCI6IjY4NmMxM2U5ZDA2NDNhZTEyYTMxNGIxZSIsImlhdCI6MTc2MjE2MDYxNn0.XTMGLiuXfeEtMvFxZCAjX3MgT1JYfN-dVqAOGSt80qw
 
 {
-    "title": "McLovin strikes again",
-    "author": "McLovin",
-    "url": "http://www.mclovin.com",
-    "likes": 69
+    "comment": "This is a great blog post!"
 }

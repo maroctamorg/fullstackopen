@@ -97,6 +97,23 @@ export const deleteBlog = (blog) => {
     }
 }
 
+export const addBlogComment = (blog, comment) => {
+    return async (dispatch) => {
+        try {
+            await blogService.addComment(blog.id, comment)
+            const updated = { ...blog, comments: blog.comments.concat(comment) }
+            dispatch(updateBlog(updated))
+        } catch (e) {
+            dispatch(
+                setNotificationWithTimeout(
+                    `unable to add comment: ${e.message}`,
+                    NOTIFICATION_TYPE.ERROR
+                )
+            )
+        }
+    }
+}
+
 export const { setBlogs, appendBlog, updateBlog, removeBlog } =
     blogSlice.actions
 export default blogSlice.reducer
