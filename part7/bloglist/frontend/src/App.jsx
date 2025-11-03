@@ -30,25 +30,27 @@ const App = () => {
     }
 
     return (
-        <div>
+        <div className="container">
             <Notification />
             {user === null ? (
                 <Login />
             ) : (
-                <div style={heroStyle}>
-                    <Link to="/">blogs</Link>
-                    <Link to="/users">users</Link>
-                    {user.username} logged-in
-                    <button onClick={logout}>logout</button>
+                <div>
+                    <div style={heroStyle}>
+                        <Link to="/">blogs</Link>
+                        <Link to="/users">users</Link>
+                        {user.username} logged-in
+                        <button onClick={logout}>logout</button>
+                    </div>
+
+                    <Routes>
+                        <Route path="/users" element={<Users />} />
+                        <Route path="/users/:id" element={<User />} />
+                        <Route path="/blogs/:id" element={<Blog />} />
+                        <Route path="/" element={<Blogs />} />
+                    </Routes>
                 </div>
             )}
-
-            <Routes>
-                <Route path="/users" element={<Users />} />
-                <Route path="/users/:id" element={<User />} />
-                <Route path="/blogs/:id" element={<Blog />} />
-                <Route path="/" element={<Blogs />} />
-            </Routes>
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom'
 import { likeBlog, deleteBlog, addBlogComment } from '../reducers/blogReducer'
+import { Button, Form } from 'react-bootstrap'
 
 const Blog = () => {
     const blogStyle = {
@@ -50,16 +51,41 @@ const Blog = () => {
                     {blog.url} <br />
                     likes{' '}
                     <span data-testid="number-of-likes">{blog.likes}</span>{' '}
-                    <button onClick={handleLike}>like</button> <br />
+                    <Button
+                        size="sm"
+                        variant="outline-primary"
+                        onClick={handleLike}
+                    >
+                        like
+                    </Button>{' '}
+                    <br />
                     added by {blog.user.username} <br />
-                    <button onClick={handleRemove}>remove</button>
+                    <Button
+                        size="sm"
+                        variant="outline-danger"
+                        onClick={handleRemove}
+                    >
+                        remove
+                    </Button>
                 </p>
             </div>
             <h4>comments</h4>
-            <form onSubmit={handleAddComment}>
-                <input type="text" name="comment" />
-                <button type="submit">add comment</button>
-            </form>
+            <Form
+                onSubmit={handleAddComment}
+                className="mb-2"
+                style={{ maxWidth: 480 }}
+            >
+                <Form.Group className="mb-2" controlId="commentInput">
+                    <Form.Control
+                        type="text"
+                        name="comment"
+                        placeholder="Write a comment"
+                    />
+                </Form.Group>
+                <Button size="sm" type="submit">
+                    add comment
+                </Button>
+            </Form>
             <ul>
                 {blog.comments.map((comment, index) => (
                     <li key={index}>{comment}</li>
