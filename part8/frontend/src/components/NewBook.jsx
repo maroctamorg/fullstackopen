@@ -10,7 +10,10 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([]);
 
   const [addBook, { loading, error }] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    refetchQueries: [
+      { query: ALL_BOOKS, variables: { genre: null } },
+      { query: ALL_AUTHORS },
+    ],
     onCompleted: () => {
       // Reset form after successful submission
       setTitle("");
