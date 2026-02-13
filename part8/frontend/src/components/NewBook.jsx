@@ -1,35 +1,60 @@
-import { useState } from 'react'
+import { useState } from "react";
+import { useMutation } from "@apollo/client/react";
+import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS } from "../queries";
 
 const NewBook = (props) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [published, setPublished] = useState('')
-  const [genre, setGenre] = useState('')
-  const [genres, setGenres] = useState([])
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [published, setPublished] = useState("");
+  const [genre, setGenre] = useState("");
+  const [genres, setGenres] = useState([]);
+
+  const [addBook, { loading, error }] = useMutation(ADD_BOOK, {
+    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    onCompleted: () => {
+      // Reset form after successful submission
+      setTitle("");
+      setPublished("");
+      setAuthor("");
+      setGenres([]);
+      setGenre("");
+    },
+    onError: (error) => {
+      console.error("Error adding book:", error.message);
+    },
+  });
 
   if (!props.show) {
-    return null
+    return null;
   }
 
   const submit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    console.log('add book...')
+    const publishedInt = parseInt(published);
 
-    setTitle('')
-    setPublished('')
-    setAuthor('')
-    setGenres([])
-    setGenre('')
-  }
+    try {
+      await addBook({
+        variables: {
+          title,
+          author,
+          published: publishedInt,
+          genres,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to add book:", error);
+    }
+  };
 
   const addGenre = () => {
-    setGenres(genres.concat(genre))
-    setGenre('')
-  }
+    setGenres(genres.concat(genre));
+    setGenre("");
+  };
 
   return (
     <div>
+      {error && <div style={{ color: "red" }}>Error: {error.message}</div>}
       <form onSubmit={submit}>
         <div>
           title
@@ -62,11 +87,13 @@ const NewBook = (props) => {
             add genre
           </button>
         </div>
-        <div>genres: {genres.join(' ')}</div>
-        <button type="submit">create book</button>
+        <div>genres: {genres.join(" ")}</div>
+        <button type="submit" disabled={loading}>
+          {loading ? "creating..." : "create book"}
+        </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default NewBook
+export default NewBook;
