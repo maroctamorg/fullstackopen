@@ -97,6 +97,7 @@ let books = [
 
 const typeDefs = /* GraphQL */ `
   type Book {
+    id: String!
     title: String!
     author: String!
     published: Int!
@@ -104,6 +105,7 @@ const typeDefs = /* GraphQL */ `
   }
 
   type Author {
+    id: String!
     name: String!
     born: Int
     bookCount: Int!
@@ -162,7 +164,7 @@ const resolvers = {
 
       const updatedAuthor = { ...author, born: args.setBornTo };
       authors = authors.map((a) => (a.name === args.name ? updatedAuthor : a));
-      return updatedAuthor;
+      return { ...updatedAuthor, bookCount: bookCount(updatedAuthor.name) };
     },
   },
 };
