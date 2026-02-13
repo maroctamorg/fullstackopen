@@ -69,38 +69,42 @@ const Authors = (props) => {
         </tbody>
       </table>
 
-      <h3>Set birthyear</h3>
-      <form onSubmit={handleSetBirthYear}>
+      {props.token ? (
         <div>
-          <label>
-            name
-            <select
-              value={selectedAuthor}
-              onChange={(e) => setSelectedAuthor(e.target.value)}
-            >
-              <option value="">-- Select Author --</option>
-              {authors.map((a) => (
-                <option key={a.id} value={a.name}>
-                  {a.name}
-                </option>
-              ))}
-            </select>
-          </label>
+          <h3>Set birthyear</h3>
+          <form onSubmit={handleSetBirthYear}>
+            <div>
+              <label>
+                name
+                <select
+                  value={selectedAuthor}
+                  onChange={(e) => setSelectedAuthor(e.target.value)}
+                >
+                  <option value="">-- Select Author --</option>
+                  {authors.map((a) => (
+                    <option key={a.id} value={a.name}>
+                      {a.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div>
+              <label>
+                born
+                <input
+                  type="number"
+                  value={birthYear}
+                  onChange={(e) => setBirthYear(e.target.value)}
+                />
+              </label>
+            </div>
+            <button type="submit" disabled={editLoading}>
+              {editLoading ? "updating..." : "update"}
+            </button>
+          </form>
         </div>
-        <div>
-          <label>
-            born
-            <input
-              type="number"
-              value={birthYear}
-              onChange={(e) => setBirthYear(e.target.value)}
-            />
-          </label>
-        </div>
-        <button type="submit" disabled={editLoading}>
-          {editLoading ? "updating..." : "update"}
-        </button>
-      </form>
+      ) : null}
     </div>
   );
 };

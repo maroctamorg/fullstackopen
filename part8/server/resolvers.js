@@ -53,7 +53,15 @@ const resolvers = {
     },
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
+      if (!context.currentUser) {
+        throw new GraphQLError("you must be authenticated to add a new book", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+          },
+        });
+      }
+
       try {
         let author = await Author.findOne({ name: args.author });
         if (!author) {
@@ -80,7 +88,15 @@ const resolvers = {
         });
       }
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
+      if (!context.currentUser) {
+        throw new GraphQLError("you must be authenticated to edit an author", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+          },
+        });
+      }
+
       try {
         const author = await Author.findOne({ name: args.name });
         if (!author) {
