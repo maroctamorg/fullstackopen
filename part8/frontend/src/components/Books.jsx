@@ -1,31 +1,37 @@
 import { useState } from "react";
-import { useQuery } from "@apollo/client/react";
-import { ALL_BOOKS } from "../queries";
+import { useQuery, useSubscription, useApolloClient } from "@apollo/client/react";
+import { ALL_BOOKS, BOOK_ADDED } from "../queries";
+import { addBookToCache } from "../utils/apolloCache";
 
 const Books = (props) => {
-  const [selectedGenre, setSelectedGenre] = useState(null);
-  const {
-    loading: loadingBooks,
-    error: errorBooks,
-    data: dataBooks,
-  } = useQuery(ALL_BOOKS, {
-    variables: { genre: selectedGenre },
-  });
-  const { data: dataGenres } = useQuery(ALL_BOOKS);
-
   if (!props.show) {
     return null;
   }
 
-  if (loadingBooks) {
+  const [selectedGenre, setSelectedGenre] = useState(null);
+  const allBooks = useQuery(ALL_BOOKS, {
+    variables: { genre: selectedGenre },
+  });
+  const { data: dataGenres } = useQuery(ALL_BOOKS);
+  const client = useApolloClient()
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data.data.bookAdded;
+      alert(`New book added: ${addedBook.title} by ${addedBook.author.name}`);
+      addBookToCache(client.cache, addedBook);
+    },
+  });
+
+  if (allBooks.loading) {
     return <div>Loading...</div>;
   }
 
-  if (errorBooks) {
-    return <div>Error: {errorBooks.message}</div>;
+  if (allBooks.error) {
+    return <div>Error: {allBooks.error.message}</div>;
   }
 
-  const books = dataBooks?.allBooks ?? [];
+  const books = allBooks.data?.allBooks ?? [];
   const allBooksForGenres = dataGenres?.allBooks ?? [];
   const genres = [...new Set(allBooksForGenres.flatMap((b) => b.genres))];
 

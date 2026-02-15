@@ -36,20 +36,7 @@ const resolvers = {
       return books;
     },
     allAuthors: async () => {
-      const authors = await Author.find();
-      return await Promise.all(
-        authors.map(async (author) => {
-          const bookCount = await Book.countDocuments({
-            author: author._id,
-          });
-          return {
-            id: author._id,
-            name: author.name,
-            born: author.born,
-            bookCount,
-          };
-        }),
-      );
+      return Author.find();
     },
     me: (root, args, context) => {
       return context.currentUser;
@@ -108,13 +95,7 @@ const resolvers = {
         }
         author.born = args.setBornTo;
         await author.save();
-        const bookCount = await Book.countDocuments({ author: author._id });
-        return {
-          id: author._id,
-          name: author.name,
-          born: author.born,
-          bookCount,
-        };
+        return author;
       } catch (error) {
         throw new GraphQLError("Failed to update author", {
           extensions: {
@@ -159,6 +140,11 @@ const resolvers = {
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) };
     },
+  },
+  Author: {
+    bookCount: async (author, args, context) => {
+      return context.loaders.bookCountByAuthor.load(author._id)
+    }
   },
   Subscription: {
     bookAdded: {

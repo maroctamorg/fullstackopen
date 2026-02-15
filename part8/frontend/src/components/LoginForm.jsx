@@ -11,6 +11,9 @@ const LoginForm = ({ setToken, show }) => {
       const token = data.login.value;
       setToken(token);
       localStorage.setItem("books-user-token", token);
+
+      setUsername("");
+      setPassword("");
     },
     onError: (error) => {
       console.error("Login error:", error.message);

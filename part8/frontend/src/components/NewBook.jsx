@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
 import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS } from "../queries";
+import { addBookToCache } from "../utils/apolloCache";
 
 const NewBook = (props) => {
   const [title, setTitle] = useState("");
@@ -15,7 +16,6 @@ const NewBook = (props) => {
       { query: ALL_AUTHORS },
     ],
     onCompleted: () => {
-      // Reset form after successful submission
       setTitle("");
       setPublished("");
       setAuthor("");
@@ -25,6 +25,10 @@ const NewBook = (props) => {
     onError: (error) => {
       console.error("Error adding book:", error.message);
     },
+    update: (cache, response) => {
+      const addedBook = response.data.addBook;
+      addBookToCache(cache, addedBook);
+    }
   });
 
   if (!props.show) {

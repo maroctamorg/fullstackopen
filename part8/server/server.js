@@ -9,11 +9,13 @@ const http = require('http')
 const jwt = require("jsonwebtoken")
 const { WebSocketServer } = require('ws')
 const { useServer } = require('graphql-ws/use/ws')
+const DataLoader = require('dataloader')
 
 const { resolvers } = require("./resolvers");
 const { connectToDatabase } = require("./db");
 const typeDefs = require("./schema");
 const User = require("./models/user");
+const Book = require("./models/book");
 
 const getUserFromAuthHeader = async (auth, jwtSecret) => {
   if (!auth || !auth.startsWith("Bearer ")) {
@@ -62,7 +64,19 @@ const startServer = async (port, mongoUri, jwtSecret) => {
       context: async ({ req }) => {
         const auth = req.headers.authorization
         const currentUser = await getUserFromAuthHeader(auth, jwtSecret)
-        return { currentUser }
+
+        const loaders = {
+          bookCountByAuthor: new DataLoader(async (authorIds) => {
+            const pipeline = [
+              { $match: { author: { $in: authorIds } } },
+              { $group: { _id: "$author", count: { $sum: 1 } } },
+            ]
+            const results = await Book.aggregate(pipeline)
+            const map = new Map(results.map(r => [String(r._id), r.count]))
+            return authorIds.map(id => map.get(String(id)) ?? 0)
+          })
+        }
+        return { currentUser, loaders }
       },
     }));
 
