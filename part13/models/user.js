@@ -34,6 +34,15 @@ User.init(
         },
       },
     },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "password cannot be empty",
+        },
+      },
+    },
   },
   {
     sequelize,

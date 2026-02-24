@@ -1,7 +1,25 @@
 const { Blog, User } = require("../models");
+const { Op } = require("sequelize");
 
-const getAllBlogs = async (_req, res, next) => {
+const getAllBlogs = async (req, res, next) => {
   try {
+    const where = {};
+
+    if (req.query.search) {
+      where[Op.or] = [
+        {
+          title: {
+            [Op.iLike]: `%${req.query.search}%`,
+          },
+        },
+        {
+          author: {
+            [Op.iLike]: `%${req.query.search}%`,
+          },
+        },
+      ];
+    }
+
     const blogs = await Blog.findAll({
       attributes: { exclude: ["userId"] },
       include: {
@@ -9,6 +27,8 @@ const getAllBlogs = async (_req, res, next) => {
         as: "user",
         attributes: ["username"],
       },
+      where,
+      order: [["likes", "DESC"]],
     });
     res.json(blogs);
   } catch (error) {

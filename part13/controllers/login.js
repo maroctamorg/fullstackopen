@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const { User } = require("../models");
 const { SECRET } = require("../utils/config");
 
@@ -10,9 +11,10 @@ const login = async (req, res, next) => {
       where: { username },
     });
 
-    const passwordCorrect = password === process.env.SECRET;
+    const passwordCorrect =
+      user && (await bcrypt.compare(password + SECRET, user.password));
 
-    if (!(user && passwordCorrect)) {
+    if (!passwordCorrect) {
       return res.status(401).json({ error: "invalid username or password" });
     }
 
