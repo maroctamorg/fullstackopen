@@ -38,8 +38,31 @@ const deleteBlog = async (req, res, next) => {
   }
 };
 
+const updateBlogLikes = async (req, res, next) => {
+  try {
+    const { likes } = req.body;
+
+    if (!Number.isInteger(likes)) {
+      return res.status(400).json({ error: "likes must be an integer" });
+    }
+
+    const blog = await Blog.findByPk(req.params.id);
+    if (!blog) {
+      return res.status(404).json({ error: "blog not found" });
+    }
+
+    blog.likes = likes;
+    await blog.save();
+
+    return res.json(blog);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getAllBlogs,
   createBlog,
   deleteBlog,
+  updateBlogLikes,
 };
