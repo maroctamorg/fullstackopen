@@ -1,6 +1,10 @@
 {
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "dotenv": "^17.3.1",
+    "express": "^4.21.2",
     "pg": "^8.18.0",
     "sequelize": "^6.37.7"
   }
