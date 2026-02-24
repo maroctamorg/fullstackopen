@@ -1,5 +1,6 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0QGV4YW1wbGUuY29tIiwiaWF0IjoxNzcxOTM3ODgyLCJleHAiOjE3NzIwMjQyODJ9.X3ED51ktN_viv_yPifhRxf4cDW6-xqwx1gF4uUFX35U
 
 {
   "author": "Ada Lovelace",

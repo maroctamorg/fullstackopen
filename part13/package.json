@@ -5,6 +5,7 @@
   "dependencies": {
     "dotenv": "^17.3.1",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.0",
     "pg": "^8.18.0",
     "sequelize": "^6.37.7"
   }

@@ -1,7 +1,7 @@
 const app = require("./app");
 const { PORT } = require("./utils/config");
 const { sequelize, connectToDatabase } = require("./utils/db");
-require("./models/blog");
+require("./models/index");
 
 const start = async () => {
   try {
