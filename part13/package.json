@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "node index.js",
-    "test": "node --test --test-concurrency=1 tests/api_ch3.test.js"
+    "test": "node --test --test-concurrency=1",
+    "migration:down": "node utils/rollback.js" 
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

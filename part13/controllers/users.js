@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Blog } = require("../models");
 const bcrypt = require("bcrypt");
 const { SECRET } = require("../utils/config");
 
@@ -63,8 +63,59 @@ const updateUserName = async (req, res, next) => {
   }
 };
 
+const getUserById = async (req, res, next) => {
+  try {
+    const where = {};
+    if (req.query.read === "true") {
+      where.read = true;
+    }
+    if (req.query.read === "false") {
+      where.read = false;
+    }
+
+    const user = await User.findByPk(req.params.id, {
+      attributes: ["name", "username"],
+      include: {
+        model: Blog,
+        as: "readings",
+        attributes: ["id", "url", "title", "author", "likes", "year"],
+        through: {
+          attributes: ["id", "read"],
+          where,
+        },
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "user not found" });
+    }
+
+    const formattedReadings = user.readings.map((reading) => ({
+      id: reading.id,
+      url: reading.url,
+      title: reading.title,
+      author: reading.author,
+      likes: reading.likes,
+      year: reading.year,
+      reading_list: {
+        id: reading.reading_list.id,
+        read: reading.reading_list.read,
+      },
+    }));
+
+    return res.json({
+      name: user.name,
+      username: user.username,
+      readings: formattedReadings,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   createUser,
   getAllUsers,
   updateUserName,
+  getUserById,
 };
