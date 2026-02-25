@@ -38,7 +38,7 @@ const getAllBlogs = async (req, res, next) => {
 
 const createBlog = async (req, res, next) => {
   try {
-    const { author, url, title, likes } = req.body;
+    const { author, url, title, likes, year } = req.body;
     const userId = req.decodedToken.id;
 
     const blog = await Blog.create({
@@ -46,6 +46,7 @@ const createBlog = async (req, res, next) => {
       url,
       title,
       likes: likes ?? 0,
+      year,
       userId,
     });
 
