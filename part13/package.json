@@ -9,7 +9,8 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.0",
     "pg": "^8.18.0",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "umzug": "^3.8.2"
   },
   "devDependencies": {
     "axios": "^1.7.9"
