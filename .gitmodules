@@ -7,3 +7,12 @@
 [submodule "part5"]
 	path = part5
 	url = https://github.com/maroctamorg/fullstackopen-part5
+[submodule "part11/full-stack-open-pokedex"]
+	path = part11/full-stack-open-pokedex
+	url = https://github.com/maroctamorg/full-stack-open-pokedex
+[submodule "part11/full-stack-open-redux-anecdotes"]
+	path = part11/full-stack-open-redux-anecdotes
+	url = https://github.com/maroctamorg/full-stack-open-redux-anecdotes
+[submodule "part12"]
+	path = part12
+	url = https://github.com/maroctamorg/fullstackopen-part12
