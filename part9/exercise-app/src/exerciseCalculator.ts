@@ -1,4 +1,4 @@
-const calculateExercises = (exerciseHours: number[], target: number) => {
+export const calculateExercises = (exerciseHours: number[], target: number) => {
   const periodLength = exerciseHours.length;
   const trainingDays = exerciseHours.filter((h) => h > 0).length;
   const average = exerciseHours.reduce((a, b) => a + b, 0) / periodLength;
@@ -29,24 +29,26 @@ const calculateExercises = (exerciseHours: number[], target: number) => {
   };
 };
 
-const parseArgumentsExerciseCalculator = (
-  args: string[],
-): { exerciseHours: number[]; target: number } => {
-  if (args.length < 4) {
-    throw new Error("not enough arguments");
-  }
+if (require.main === module) {
+  const parseArgumentsExerciseCalculator = (
+    args: string[],
+  ): { exerciseHours: number[]; target: number } => {
+    if (args.length < 4) {
+      throw new Error("not enough arguments");
+    }
 
-  const target = Number(args[2]);
-  const exerciseHours = args.slice(3).map(Number);
+    const target = Number(args[2]);
+    const exerciseHours = args.slice(3).map(Number);
 
-  if (isNaN(target) || exerciseHours.some(isNaN)) {
-    throw new Error("provided arguments were not numbers");
-  }
+    if (isNaN(target) || exerciseHours.some(isNaN)) {
+      throw new Error("provided arguments were not numbers");
+    }
 
-  return { exerciseHours, target };
-};
+    return { exerciseHours, target };
+  };
 
-const { exerciseHours, target } = parseArgumentsExerciseCalculator(
-  process.argv,
-);
-console.log(calculateExercises(exerciseHours, target));
+  const { exerciseHours, target } = parseArgumentsExerciseCalculator(
+    process.argv,
+  );
+  console.log(calculateExercises(exerciseHours, target));
+}
