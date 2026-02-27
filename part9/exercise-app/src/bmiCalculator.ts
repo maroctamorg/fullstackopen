@@ -1,4 +1,4 @@
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   const heightInMeters = height / 100;
   const bmi = weight / (heightInMeters * heightInMeters);
   if (bmi < 18.5) {
@@ -16,22 +16,24 @@ const calculateBmi = (height: number, weight: number): string => {
   return "Normal range";
 };
 
-const parseArgumentsBmiCalculator = (
-  args: string[],
-): { height: number; weight: number } => {
-  if (args.length < 4) {
-    throw new Error("not enough arguments");
-  }
+if (require.main === module) {
+  const parseArgumentsBmiCalculator = (
+    args: string[],
+  ): { height: number; weight: number } => {
+    if (args.length < 4) {
+      throw new Error("not enough arguments");
+    }
 
-  const height = Number(args[2]);
-  const weight = Number(args[3]);
+    const height = Number(args[2]);
+    const weight = Number(args[3]);
 
-  if (isNaN(height) || isNaN(weight)) {
-    throw new Error("provided arguments were not numbers");
-  }
+    if (isNaN(height) || isNaN(weight)) {
+      throw new Error("provided arguments were not numbers");
+    }
 
-  return { height, weight };
-};
+    return { height, weight };
+  };
 
-const { height, weight } = parseArgumentsBmiCalculator(process.argv);
-console.log(calculateBmi(height, weight));
+  const { height, weight } = parseArgumentsBmiCalculator(process.argv);
+  console.log(calculateBmi(height, weight));
+}
