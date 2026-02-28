@@ -1,0 +1,34 @@
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "dateOfBirth": "1990-01-01",
+  "ssn": "123-45-6789",
+  "gender": "male",
+  "occupation": "Software Engineer"
+}
+
+###
+
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "dateOfBirth": "1990-01-01",
+  "ssn": "123-45-6789",
+  "gender": "xyz",
+  "occupation": "Software Engineer"
+}
+
+###
+
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "dateOfBirth": "1990-01-01",
+  "ssn": "123-45-6789"
+}

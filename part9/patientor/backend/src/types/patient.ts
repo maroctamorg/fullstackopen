@@ -1,16 +1,13 @@
-export interface Diagnosis {
-  code: string;
-  name: string;
-  latin?: string;
-}
+import { Gender } from "./enums/gender";
 
 export interface Patient {
   id: string;
   name: string;
   dateOfBirth: string;
   ssn: string;
-  gender: string;
+  gender: Gender;
   occupation: string;
 }
 
+export type NewPatient = Omit<Patient, "id">;
 export type NonSensitivePatient = Omit<Patient, "ssn">;
