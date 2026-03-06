@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Gender, Patient, NewPatient } from "../types";
-import { InvalidInputError } from "../errors/InvalidInputError";
+import { assertObjectInput, validateRequiredFields } from "./mapperUtils";
 
 const requiredNewPatientFields: string[] = [
   "name",
@@ -19,18 +19,8 @@ const newPatientSchema = z.object({
 });
 
 export const mapNewPatient = (input: unknown): NewPatient => {
-  if (!input || typeof input !== "object") {
-    throw new InvalidInputError("invalid patient data input");
-  }
-
-  const missingField = requiredNewPatientFields.find(
-    (field) => !(field in input),
-  );
-  if (missingField) {
-    throw new InvalidInputError(
-      `missing required patient data field: ${missingField}`,
-    );
-  }
+  assertObjectInput(input);
+  validateRequiredFields(input, requiredNewPatientFields);
 
   return newPatientSchema.parse(input);
 };
