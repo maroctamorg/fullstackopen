@@ -19,3 +19,6 @@
 [submodule "part9/patientor/frontend"]
 	path = part9/patientor/frontend
 	url = https://github.com/maroctamorg/full-stack-open-patientor
+[submodule "part10"]
+	path = part10
+	url = https://github.com/maroctamorg/fullstackopen-part10
